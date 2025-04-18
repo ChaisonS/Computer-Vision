@@ -136,13 +136,31 @@ def land_drone():
 # MAIN SEQUENCE
 # ========================
 if __name__ == "__main__":
-    set_mode("GUIDED")
-    arm_drone()
-    takeoff(10)
+    set_mode("GUIDED")  # Set mode to GUIDED
+    arm_drone()         # Arm motors
+    takeoff(10)         # Take off to 10m
 
     print("Starting quadrant-based movement loop... Press Ctrl+C to stop.")
     try:
         while True:
+            # Check the centered status from the file
+            try:
+                with open("centered_status.txt", "r") as f:
+                    centered_status = f.read().strip()
+
+                if centered_status == "True":
+                    print("Release!")  # Print "Release!" if centered status is True
+                    land_drone()  # Land the drone
+                    break  # Exit the loop after landing
+                else:
+                    print("Not centered, continuing...")
+
+            except FileNotFoundError:
+                print("centered_status.txt not found, waiting...")
+            except Exception as e:
+                print(f"Error reading centered_status.txt: {e}")
+
+            # Read quadrant info and perform movement
             try:
                 with open("quadrant.txt", "r") as f:
                     quadrant = f.read().strip()
