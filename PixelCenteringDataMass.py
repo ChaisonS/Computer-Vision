@@ -83,6 +83,11 @@ while True:
     cv2.circle(final_result, (center_x, center_y), radius, (255, 0, 255), 2)
 
     cv2.imshow("Result", final_result)
+    with open("quadrant.txt", "w") as f:
+        f.write(dominant_quadrant)
+    with open("centered_status.txt", "w") as f:
+        f.write(str(centered))  # Write True/False
+
 
     if cv2.waitKey(1) & 0xFF == ord('q'):
         break
